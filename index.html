@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Quiz - Perguntas e Respostas</title>
+
+    <style>
+
+        body {
+
+            font-family: Arial, sans-serif;
+
+            background: #e8efff;
+
+            text-align: center;
+
+            padding: 30px;
+
+        }
+
+        .container {
+
+            background: white;
+
+            max-width: 500px;
+
+            margin: 40px auto;
+
+            padding: 25px;
+
+            border-radius: 15px;
+
+            box-shadow: 0 4px 12px #0002;
+
+        }
+
+        h1 {
+
+            color: #3156a3;
+
+        }
+
+        #pergunta {
+
+            font-size: 20px;
+
+            font-weight: bold;
+
+        }
+
+        .alternativa {
+
+            display: block;
+
+            width: 100%;
+
+            padding: 12px;
+
+            margin: 10px 0;
+
+            border: 1px solid #3156a3;
+
+            background: white;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+        }
+
+        .alternativa:hover {
+
+            background: #dce6ff;
+
+        }
+
+        .selecionada {
+
+            background: #3156a3;
+
+            color: white;
+
+        }
+
+        button {
+
+            background: #3156a3;
+
+            color: white;
+
+            padding: 12px 25px;
+
+            border: none;
+
+            border-radius: 8px;
+
+            cursor: pointer;
+
+            margin-top: 15px;
+
+        }
+
+        #resultado {
+
+            font-size: 20px;
+
+            font-weight: bold;
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Quiz de Perguntas</h1>
+
+    <p id="numero"></p>
+
+    <p id="pergunta"></p>
+
+    <div id="alternativas"></div>
+
+    <button onclick="proximaPergunta()">Próxima</button>
+
+    <p id="resultado"></p>
+
+</div>
+
+<script>
+
+const perguntas = [
+
+   {
+            pergunta:"Qual o melhor funvionario para organizar as financas",
+            alternativas:["Jorge FIN","David RH","Chris ADM","Desmond TI","Calr MARK"],
+            correta:0
+        },
+
+        {
+            pergunta:"Qual a melhor pessoa pra organizar documentos",
+            alternativas:["Desmond TI","Chris ADM","Calr MARK","Jorge FIN","David RH"],
+            correta:1
+        },
+
+        {
+            pergunta:"Quem e chamaria para consertar algoquebrado",
+            alternativas:["Chris ADM","Jorge FIN","David RH","Calr MARK","Desmond TI"],
+            correta:4
+        },
+
+        {
+            pergunta:"Quem voce samaria para poder ter uma reunião com outra pessoa ",
+            alternativas:["Calr MARK","Desmond TI","Jorge FIN","David RH","Chris ADM"],
+            correta:3
+        }
+
+];
+
+let atual = 0;
+
+let pontos = 0;
+
+let selecionada = null;
+
+function mostrarPergunta() {
+
+    selecionada = null;
+
+    document.getElementById("numero").innerText =
+
+        "Pergunta " + (atual + 1) + " de " + perguntas.length;
+
+    document.getElementById("pergunta").innerText =
+
+        perguntas[atual].pergunta;
+
+    const div = document.getElementById("alternativas");
+
+    div.innerHTML = "";
+
+    perguntas[atual].alternativas.forEach((alternativa, indice) => {
+
+        const botao = document.createElement("button");
+
+        botao.innerText = alternativa;
+
+        botao.className = "alternativa";
+
+        botao.onclick = function() {
+
+            selecionada = indice;
+
+            document.querySelectorAll(".alternativa").forEach(b => {
+
+                b.classList.remove("selecionada");
+
+            });
+
+            botao.classList.add("selecionada");
+
+        };
+
+        div.appendChild(botao);
+
+    });
+
+}
+
+function proximaPergunta() {
+
+    if (selecionada === null) {
+
+        alert("Escolha uma alternativa!");
+
+        return;
+
+    }
+
+    if (selecionada === perguntas[atual].correta) {
+
+        pontos++;
+
+    }
+
+    atual++;
+
+    if (atual < perguntas.length) {
+
+        mostrarPergunta();
+
+    } else {
+
+        document.querySelector(".container").innerHTML = `
+
+            <h1>Quiz finalizado!</h1>
+
+            <p id="resultado">
+
+                Você acertou ${pontos} de ${perguntas.length} perguntas!
+
+            </p>
+
+            <button onclick="location.reload()">Refazer quiz</button>
+
+        `;
+
+    }
+
+}
+
+mostrarPergunta();
+
+</script>
+
+</body>
+
+</html>
